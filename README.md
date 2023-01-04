@@ -73,3 +73,9 @@ func main() {
 
 The example application requires the presence of a local PNG named 'image.png', and will provide the converted ascii art file called 'image.txt'.
 For convenience's sake, the input file should not be too large. This will create an output which may be difficult to portray, as text size plays a role in its presentation.
+
+## Output
+
+The following image displays the output of the conversion, compared to the input:
+
+![Senjou No Oubashi](https://github.com/faakern/ascii-creator/blob/main/senju_no_oubashi.png?raw=true)
