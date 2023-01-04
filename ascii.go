@@ -22,15 +22,15 @@ func (c *CharSet) rgbaToAscii(r uint32, g uint32, b uint32, a uint32) byte {
 }
 
 // Generate returns an ascii (byte array) representation,
-// based on input properties consisting of an image and a charset.
-func (a *Properties) Generate() ([]byte, error) {
-	img := a.img
+// based on a parameterized generator consisting of an image and a charset.
+func (g *Generator) Generate() ([]byte, error) {
+	img := g.img
 	width, height := img.Bounds().Max.X, img.Bounds().Max.Y
 
 	var ascii []byte
 	for y := 0; y < height; y++ {
 		for x := 0; x < width; x++ {
-			ascii = append(ascii, a.charset.rgbaToAscii(img.At(x, y).RGBA()))
+			ascii = append(ascii, g.charset.rgbaToAscii(img.At(x, y).RGBA()))
 		}
 		ascii = append(ascii, '\n') // Append a newline at the end of each row
 	}
@@ -38,7 +38,7 @@ func (a *Properties) Generate() ([]byte, error) {
 	return ascii, nil
 }
 
-type Properties struct {
+type Generator struct {
 	charset CharSet
 	img     image.Image
 }

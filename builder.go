@@ -5,11 +5,11 @@ import (
 )
 
 type Builder struct {
-	properties *Properties
+	generator *Generator
 }
 
 func (b *Builder) WithCharSet(charset CharSet) *Builder {
-	b.properties.charset = charset
+	b.generator.charset = charset
 	return b
 }
 
@@ -17,8 +17,8 @@ func (b *Builder) WithInput() *InputBuilder {
 	return &InputBuilder{*b}
 }
 
-func (b *Builder) Build() *Properties {
-	return b.properties
+func (b *Builder) Build() *Generator {
+	return b.generator
 }
 
 type InputBuilder struct {
@@ -26,10 +26,10 @@ type InputBuilder struct {
 }
 
 func (b *InputBuilder) Image(image image.Image) *InputBuilder {
-	b.properties.img = image
+	b.generator.img = image
 	return b
 }
 
 func NewBuilder() *Builder {
-	return &Builder{properties: &Properties{}}
+	return &Builder{generator: &Generator{}}
 }
