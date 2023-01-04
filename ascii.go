@@ -1,6 +1,7 @@
 package ascii
 
 import (
+	"errors"
 	"image"
 )
 
@@ -24,6 +25,10 @@ func (c *CharSet) rgbaToAscii(r uint32, g uint32, b uint32, a uint32) byte {
 // Generate returns an ascii (byte array) representation,
 // based on a parameterized generator consisting of an image and a charset.
 func (g *Generator) Generate() ([]byte, error) {
+	if g.img == nil || g.charset.Characters == nil {
+		return nil, errors.New("no required image or charset provided")
+	}
+
 	img := g.img
 	width, height := img.Bounds().Max.X, img.Bounds().Max.Y
 
