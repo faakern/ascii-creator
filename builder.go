@@ -23,6 +23,11 @@ func (b *Builder) WithCharSet(charset CharSet) *Builder {
 	return b
 }
 
+func (b *Builder) WithGammaCorrection(correction float32) *Builder {
+	b.generator.gammaCorrection = correction
+	return b
+}
+
 func (b *Builder) WithInput() *InputBuilder {
 	return &InputBuilder{*b}
 }
@@ -45,5 +50,5 @@ func (b *InputBuilder) Image(image image.Image) *InputBuilder {
 // The builder 'object' provides convenience functions for specifying generator properties,
 // e.g. what character set to use for the ascii generation, and what input image to use.
 func NewBuilder() *Builder {
-	return &Builder{generator: &Generator{alphaValue: '@', alphaThreshold: 0}}
+	return &Builder{generator: &Generator{alphaValue: '@', alphaThreshold: 0, gammaCorrection: 1.0}}
 }

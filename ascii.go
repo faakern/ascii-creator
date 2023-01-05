@@ -5,13 +5,21 @@ import (
 	"image"
 )
 
-func (c *CharSet) rgbaToAscii(r uint32, g uint32, b uint32) byte {
+func (c *CharSet) rgbaToAscii(r uint32, g uint32, b uint32, gamma float32) byte {
 	// Find the luminescence of this pixel value
-	y := (0.2126 * float32(r/257)) + (0.7152 * float32(g/257)) + (0.0722 * float32(b/257))
+	y := ((0.2126 * gamma) * float32(r/257)) + ((0.7152 * gamma) * float32(g/257)) + ((0.0722 * gamma) * float32(b/257))
 
 	// Place the value within the range of the represented properties characters,
 	// and return its value.
-	pos := int(y) * len(c.Characters) / 257
+	bufLen := len(c.Characters)
+	pos := int(y) * bufLen / 257
+	if pos < 0 {
+		pos = 0
+	}
+
+	if pos >= bufLen {
+		pos = bufLen - 1
+	}
 
 	return c.Characters[pos]
 }
@@ -24,6 +32,10 @@ func (gen *Generator) Generate() ([]byte, error) {
 	}
 
 	img := gen.img
+	var gamma float32 = 1.0
+	if gen.gammaCorrection != 0 {
+		gamma = gen.gammaCorrection
+	}
 	width, height := img.Bounds().Max.X, img.Bounds().Max.Y
 
 	var ascii []byte
@@ -31,7 +43,7 @@ func (gen *Generator) Generate() ([]byte, error) {
 		for x := 0; x < width; x++ {
 			r, g, b, a := img.At(x, y).RGBA()
 			if float32(a/257) > float32(gen.alphaThreshold) {
-				ascii = append(ascii, gen.charset.rgbaToAscii(r, g, b))
+				ascii = append(ascii, gen.charset.rgbaToAscii(r, g, b, gamma))
 			} else {
 				ascii = append(ascii, gen.alphaValue)
 			}
@@ -50,10 +62,11 @@ func (gen *Generator) Generate() ([]byte, error) {
 // The more characters used, the more nuances the ascii image will gain.
 // img holds the image to be used an input for the ascii generation.
 type Generator struct {
-	alphaThreshold int
-	alphaValue     byte
-	charset        CharSet
-	img            image.Image
+	alphaThreshold  int
+	alphaValue      byte
+	charset         CharSet
+	gammaCorrection float32
+	img             image.Image
 }
 
 type CharSet struct {

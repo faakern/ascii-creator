@@ -103,3 +103,18 @@ The input file name is expected to be provided as the first program argument.
 The following image displays the output of the conversion, compared to the input:
 
 ![Senjou No Oubashi](https://github.com/faakern/ascii-creator/blob/main/senju_no_oubashi.png?raw=true)
+
+## Gamma Correction
+
+The ascii generation may produce an output which doesn't satisfy your aesthetic preferences.
+Maybe it contains too much noise or has too dark values.
+
+To allow for a cleaner output, the ascii generator can be specified with a gamma correction value:
+
+```Golang
+	generator := builder.WithCharSet(creator.CharSet{
+		Characters: []byte{' ', '.', ',', ':', ';', '+', '*', '?', '%', '&', '#', '@'},
+	}).WithGammaCorrection(1.5).WithInput().Image(img).Build()
+```
+
+![Added Gamma Correction](https://github.com/faakern/ascii-creator/blob/main/gamma_corrected.png?raw=true)
