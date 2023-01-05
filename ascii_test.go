@@ -14,6 +14,8 @@ func TestGenerator_Generate(t *testing.T) {
 	img.Set(0, 0, color.Black)
 
 	generator := Generator{
+		alphaValue:     '@',
+		alphaThreshold: 0,
 		charset: CharSet{
 			[]byte{' ', '@'},
 		},
@@ -38,6 +40,8 @@ func TestGenerator_Generate(t *testing.T) {
 
 func TestGenerator_GenerateShouldFailOnNoImage(t *testing.T) {
 	generator := Generator{
+		alphaValue:     '@',
+		alphaThreshold: 0,
 		charset: CharSet{
 			[]byte{' ', '@'},
 		},
@@ -52,7 +56,9 @@ func TestGenerator_GenerateShouldFailOnNoImage(t *testing.T) {
 func TestGenerator_GenerateShouldFailOnNoCharSet(t *testing.T) {
 	img := image.NewRGBA(image.Rect(0, 0, 30, 30))
 	generator := Generator{
-		img: img,
+		alphaValue:     '@',
+		alphaThreshold: 0,
+		img:            img,
 	}
 
 	output, err := generator.Generate()

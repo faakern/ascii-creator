@@ -76,6 +76,28 @@ func main() {
 The example application requires the presence of a local PNG named 'image.png', and will provide the converted ascii art file called 'image.txt'.
 For convenience's sake, the input file should not be too large. This will create an output which may be difficult to portray, as text size plays a role in its presentation.
 
+An alternative approach, providing more freedom to choose input, can be achieved by replacing the first lines of code with the following:
+
+```Golang
+	// Register supported image types
+	image.RegisterFormat("png", "png", png.Decode, png.DecodeConfig)
+	image.RegisterFormat("jpg", "jpg", jpeg.Decode, jpeg.DecodeConfig)
+	fmt.Println("Converting image...")
+
+	// Read the name of the input file
+	args := os.Args[1:]
+	if args == nil || len(args) == 0 {
+		fmt.Println("No input file specified.")
+		os.Exit(1)
+	}
+
+	// Open the input file and decode the image
+	file, err := os.Open(args[0])
+	img, _, err := image.Decode(file)
+```
+
+The input file name is expected to be provided as the first program argument.
+
 ## Output
 
 The following image displays the output of the conversion, compared to the input:
