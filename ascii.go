@@ -26,9 +26,9 @@ func (c *CharSet) rgbaToAscii(r uint32, g uint32, b uint32, gamma float32) byte 
 
 // Generate returns an ascii (byte array) representation,
 // based on a parameterized generator consisting of an image and a charset.
-func (gen *Generator) Generate() ([]byte, error) {
+func (gen *Generator) Generate(result *Result) error {
 	if gen.img == nil || gen.charset.Characters == nil {
-		return nil, errors.New("no required image or charset provided")
+		return errors.New("no required image or charset provided")
 	}
 
 	img := gen.img
@@ -51,7 +51,11 @@ func (gen *Generator) Generate() ([]byte, error) {
 		ascii = append(ascii, '\n') // Append a newline at the end of each row
 	}
 
-	return ascii, nil
+	*result = Result{
+		Ascii: ascii,
+	}
+
+	return nil
 }
 
 // Generator provides parameters for generating ascii output.
@@ -71,4 +75,8 @@ type Generator struct {
 
 type CharSet struct {
 	Characters []byte
+}
+
+type Result struct {
+	Ascii []byte
 }

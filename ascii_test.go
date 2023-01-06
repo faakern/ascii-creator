@@ -22,18 +22,19 @@ func TestGenerator_Generate(t *testing.T) {
 		img: img,
 	}
 
-	output, err := generator.Generate()
-	if output == nil || err != nil {
+	var output Result
+	err := generator.Generate(&output)
+	if output.Ascii == nil || err != nil {
 		t.Fail()
 	}
 
 	// Check if length of the buffer is correct - expect an additional character (newline) for each row
-	if len(output) != 930 {
-		t.Errorf("Output length is not correct: %d", len(output))
+	if len(output.Ascii) != 930 {
+		t.Errorf("Output length is not correct: %d", len(output.Ascii))
 	}
 
 	// Pick some random places to check for values, in addition to the expected first value
-	if output[0] != ' ' || output[230] != '@' || output[390] != '@' || output[740] != '@' {
+	if output.Ascii[0] != ' ' || output.Ascii[230] != '@' || output.Ascii[390] != '@' || output.Ascii[740] != '@' {
 		t.Errorf("Output does not contain correct value")
 	}
 }
@@ -47,8 +48,9 @@ func TestGenerator_GenerateShouldFailOnNoImage(t *testing.T) {
 		},
 	}
 
-	output, err := generator.Generate()
-	if output != nil || err == nil {
+	var output Result
+	err := generator.Generate(&output)
+	if output.Ascii != nil || err == nil {
 		t.Fail()
 	}
 }
@@ -61,8 +63,9 @@ func TestGenerator_GenerateShouldFailOnNoCharSet(t *testing.T) {
 		img:            img,
 	}
 
-	output, err := generator.Generate()
-	if output != nil || err == nil {
+	var output Result
+	err := generator.Generate(&output)
+	if output.Ascii != nil || err == nil {
 		t.Fail()
 	}
 }
